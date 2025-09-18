@@ -118,10 +118,6 @@ h1 {
   background: #ddd;
 }
 
-.tab-link.active {
-  background: #ad66cc;
-  color: #fff;
-}
 .tab-content {
   margin-left: 200px;  /* push main content to the right */
 }
@@ -171,4 +167,5 @@ header .description {
 
 html {
   overflow-y: scroll;  /* always reserve scrollbar */
+
 }
