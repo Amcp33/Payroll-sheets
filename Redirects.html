@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Browser Directory</title>
+  <!-- Link to your main stylesheet -->
+  <link rel="stylesheet" href="./Employment Letter/Letter Generator.css">
+  <style>
+    /* Only NEW styles specific to the browser cards */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      justify-items: center;
+      margin-top: 20px;
+    }
+
+    .browser-card {
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      transition: transform 0.2s, box-shadow 0.2s;
+      width: 180px;
+      cursor: pointer;
+      text-decoration: none;
+      color: #333;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+
+    }
+
+    .browser-card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.15);
+    }
+
+    .browser-card img {
+      height: 40px;
+      margin-bottom: 12px;
+    }
+
+    .browser-card span {
+      display: block;
+      font-weight: bold;
+      font-size: 15px;
+      color: #6a1b9a;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <h2 class="sidebar-title">Payroll Tabs</h2>
+    <a href="index.html" class="tab-link">Worksheets</a>
+    <div class="tab-link active">Website Directory</div>
+  <a href="./Employment Letter/PWLetter.html" class="tab-link">Letter Generator</a>
+    <a href="PWscript.html" class="tab-link">Scripts</a>
+    <a href="credits.html" class="tab-link">About</a>
+  </div>
+
+  <!-- Main Content -->
+
+      <div class="container">
+              <img src="./Images/Allcare Logo.png" alt="All Care Logo" class="logo" width="340">
+      <h1>Website Directory</h1>
+      <h3>Select your browser</h3>
+      </div>
+       <div class="tab-content">
+      <div class="grid">
+        <!-- Row 1 -->
+        <a href="https://outlook.office365.com/mail/" class="browser-card" target="_blank">
+          <img src="./Images/Microsoft_Office_Outlook_(2018–present).svg.png" alt="outlook">
+          <span>Outlook</span>
+        </a>
+
+        <a href="https://app.hhaexchange.com/identity/account/login" class="browser-card" target="_blank">
+          <img src="./Images/Logo.png" alt="Chrome">
+          <span>HHAexchange</span>
+        </a>
+
+        <a href="https://online.adp.com/signin/v1/?APPID=WFNPortal&productId=80e309c3-7085-bae1-e053-3505430b5495&returnURL=https://workforcenow.adp.com/&callingAppId=WFN&TARGET=-SM-https%3a%2f%2fworkforcenow%2eadp%2ecom%2ftheme%2findex%2ehtml%23/home" class="browser-card" target="_blank">
+          <img src="./Images/ADP logo.gif" alt="Edge">
+          <span>ADP</span>
+        </a>
+
+        <a href="https://auth.wealthcare.com/Account/Login?ReturnUrl=%2Fconnect%2Fauthorize%2Fcallback%3Fclient_id%3Dwca_web%26redirect_uri%3Dhttps%253A%252F%252Fwww.wealthcareadmin.com%252Fdefault.aspx%26response_type%3Dcode%26scope%3Dopenid%2520offline_access%2520bensoft_api%2520profile%2520bensoft_identity%2520alegeus_identity%26code_challenge%3Dnp4p9xnI67ANmzVdyruasrR6nI5twLbRZJxyanNwaxo%26code_challenge_method%3DS256%26state%3DOpenIdConnect.AuthenticationProperties%253DmM2VSs6pAkf6VeoJsuZv-aUJTWCxzm7ZE4G88Zn3ZEVtk_qJkPZRg2CtYgL7VFLh4LQsgdHtTPRTpA3XJoEn1o7DzzNKfN9v0cMukfV47rpbgcl47g1_0pHAGq1hOTrctth96zuKnziZmQ6ALMCXwgCr5D2LCA6kurmUHZMWvq_B6jVGer3tjGOnTO5VDA67zp1Gtz9nB8MyFhPXbz8uDaOGqUnAxv6iR1fhzncYYxAaGlzhaMMeBLaOuVYkMcWQ1hDIdUiBAbSxO4xzlL-7iSR6Yij6w4qLWBhDJ6pSKA0%26response_mode%3Dform_post%26x-client-SKU%3DID_NET461%26x-client-ver%3D5.3.0.0" class="browser-card" target="_blank">
+          <img src="./Images/Leading edge.gif" alt="Firefox">
+          <span>Leading Edge</span>
+        </a>
+
+        <!-- Row 2 -->
+        <a href="https://thegimbal.net/login" class="browser-card" target="_blank">
+          <img src="./Images/gimbal-logo.svg" alt="Safari">
+          <span>Gimbal</span>
+        </a>
+
+        <a href="https://www.mykplan.com/SponsorSecure_Net/Login.aspx" class="browser-card" target="_blank">
+          <img src="./Images/ADP logo.gif" alt="ADP logo">
+          <span>Mykplan (401k)</span>
+        </a>
+
+        <a href="https://www.wealthcareadmin.com/" class="browser-card" target="_blank">
+          <img src="./Images/logo-fsa-light-rgb.png" alt="Brave">
+          <span>FSA store</span>
+        </a>
+
+        <a href="https://allcarela-my.sharepoint.com/my?id=%2Fpersonal%2Famancio%5Fallcarelas%5Fcom%2FDocuments%2FPayroll%20Folder&csf=1&web=1&e=LfF08m&ovuser=5db2ee9b%2D21f9%2D41d8%2D9b71%2D11addcbc2849%2CAmancio%40allcarelas%2Ecom&OR=Teams%2DHL&CT=1749249028349&clickparams=eyJBcHBOYW1lIjoiVGVhbXMtRGVza3RvcCIsIkFwcFZlcnNpb24iOiI0OS8yNTA1MDQwMTYyNCIsIkhhc0ZlZGVyYXRlZFVzZXIiOmZhbHNlfQ%3D%3D&CID=ac98a5a1%2D50af%2D9000%2D3daf%2D6d87525b030c&cidOR=SPO&FolderCTID=0x012000E911906C9F5CF5459D40516675F8473A" class="browser-card" target="_blank">
+          <img src="./Images/Microsoft_Office_OneDrive_(2019–present).svg.png" alt="Brave">
+          <span>Onedrive</span>
+        </a>
+    </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

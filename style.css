@@ -91,3 +91,84 @@ h1 {
 .rowdada-hidden {
       display: none;
 }
+
+.sidebar {
+  position: absolute;       /* new: pin it */
+  top: 150px;               /* adjust so it sits under the header */
+  left: 20px;               /* space from the left edge */
+  width: 160px;             /* fixed width */
+
+  display: flex;            /* keep your existing setup */
+  flex-direction: column;
+}
+
+
+.tab-link {
+  background: #f2f2f2;
+  color: #333;
+  text-decoration: none;
+  padding: 12px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: background 0.3s;
+}
+
+.tab-link:hover {
+  background: #ddd;
+}
+
+.tab-link.active {
+  background: #ad66cc;
+  color: #fff;
+}
+.tab-content {
+  margin-left: 200px;  /* push main content to the right */
+}
+
+.tab-link.active {
+  background: #ad66cc;   /* highlight color */
+  color: #fff;
+  font-weight: bold;
+  font-size: 18px;       /* a bit bigger */
+  cursor: default;       /* no pointer hand */
+  pointer-events: none;  /* not clickable */
+}
+
+.sidebar-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  color: #333;
+  text-align: center;
+}
+header {
+  text-align: center;
+  margin-top: 30px;
+  margin-bottom: 20px;
+}
+
+header h1 {
+  font-size: 32px;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+header .subtitle {
+  font-size: 20px;
+  color: #666;
+  margin-bottom: 12px;
+  font-weight: normal;
+}
+
+header .description {
+  max-width: 700px;
+  margin: 0 auto 20px;
+  font-size: 16px;
+  color: #444;
+  line-height: 1.5;
+}
+
+html {
+  overflow-y: scroll;  /* always reserve scrollbar */
+}

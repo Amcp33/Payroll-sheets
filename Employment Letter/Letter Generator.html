@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Letter Generator</title>
+  <link rel="stylesheet" href="Letter Generator.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+        <div class="sidebar">
+  <h2 class="sidebar-title">Payroll Tabs</h2>
+  <a href="../index.html" class="tab-link">Worksheets</a>
+<a href="../Redirects.html" class="tab-link">Website Directory</a>
+  <div class="tab-link active">Letter Generator</div>
+ <a href="../PWscript.html" class="tab-link">Scripts</a>
+  <a href="../credits.html" class="tab-link">About</a>
+</div>
+
+      <img src="../Images/Allcare Logo.png" alt="All Care Logo" class="logo" width="340">
+      <h1>Letter Generator</h1>
+      <h3>Choose a Letter Type</h3>
+    </div>
+
+    <!-- Options -->
+    <div class="options">
+
+      <!-- Employment Letter -->
+      <div class="option">
+  <button class="btn" onclick="toggleBox('employmentBox')">Employment Letter</button>
+    </div>
+    <div id="employmentBox" class="details-box hidden">
+  <h4>Employment Letter</h4>
+  
+  <p class="desc">Generate employment verification letters. <strong>For any modifications, please contact Faheem or Amancio.</strong></p>
+    <label>Is the Aide Active on HHA?</label>
+  <select id="empCheck" onchange="toggleEmploymentForm()">
+    <option value="">-- Select --</option>
+    <option value="yes">Yes</option>
+    <option value="no">No</option>
+  </select>
+  <p id="empWarning" style="color:red; display:none;">
+    To make an employment letter, the Aide must be active first.
+  </p>
+  <div id="empForm" style="display:none;">
+  <label>Employee Name:</label>
+  <input type="text" id="empName">
+
+  <label>First Work Date (MM/DD/YYYY):</label>
+  <input type="text" id="empDate">
+
+  <label>Hours Worked per Week:</label>
+  <input type="number" id="empHours">
+
+  <label>Gross Weekly Payment Amount:</label>
+  <input type="number" id="empAmount">
+
+<button class="action-btn" onclick="generateEmploymentLetter()">Generate Employment Letter</button>
+</div>
+</div>
+
+ <div class="option">
+  <button class="btn" onclick="toggleBox('terminationBox')">Termination Letter</button>
+</div>
+
+<div id="terminationBox" class="details-box hidden">
+  <h4>Termination Letter</h4>
+  <p class="desc">Generate employee termination letters. <strong>For any modifications, please contact Faheem or Amancio.</strong></p>
+
+   <label>Is the Aide Terminated on HHA?</label>
+  <select id="termCheck" onchange="toggleTerminationForm()">
+    <option value="">-- Select --</option>
+    <option value="yes">Yes</option>
+    <option value="no">No</option>
+  </select>
+  <p id="termWarning" style="color:red; display:none;">
+    To make a termination letter, the Aide must be terminated first.
+  </p>
+
+  <div id="termForm" style="display:none;">
+<label>Employee Name:</label>
+<input type="text" id="termName">
+
+<label>Hire Date (MM/DD/YYYY):</label>
+<input type="text" id="termHireDate">
+
+<label>Termination Date (MM/DD/YYYY):</label>
+<input type="text" id="termEndDate">
+
+
+<button class="action-btn" onclick="generateTerminationLetter()">Generate Termination Letter</button>
+
+</div>
+</div>
+  </div>
+
+  <script>
+  function toggleBox(id) {
+    const box = document.getElementById(id);
+    box.classList.toggle("show");
+  }
+  </script>
+
+<script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
+<script>
+async function generateEmploymentLetter() {
+  const { PDFDocument, StandardFonts, rgb } = PDFLib;
+
+  // Grab inputs
+  const name = document.getElementById("empName").value;
+  const startDate = document.getElementById("empDate").value;
+  const hours = document.getElementById("empHours").value;
+  const amount = document.getElementById("empAmount").value;
+  const today = new Date().toLocaleDateString();
+
+  
+
+  // Load template
+  const templateUrl = "Blank All Care EL template.pdf";
+  const existingPdfBytes = await fetch(templateUrl).then(res => res.arrayBuffer());
+
+  const pdfDoc = await PDFDocument.load(existingPdfBytes);
+  const pages = pdfDoc.getPages();
+  const firstPage = pages[0];
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+  const boldFont = await pdfDoc.embedFont(StandardFonts.HelveticaBold);
+  
+
+  // Write block text with line breaks
+  const letterText = 
+`Date: ${today}
+
+
+To Whom It May Concern:
+
+
+This is to certify that, ${name}, is currently working with SIMPSON SOLUTIONS, 
+LLC, as a Home Health Aide for the PCA Program since ${startDate} and currently works ${hours} 
+hours per week. Their current gross amount of weekly payment is $${amount}.
+
+
+
+If you have any questions & concerns about their employment, please feel free to contact me 
+at (866) 447-3232.
+
+
+
+Best Regards,
+`;
+
+  // Draw the letter
+  firstPage.drawText(letterText, {
+    x: 60,
+    y: 600,          // adjust until it fits right
+    size: 12,
+    font,
+    color: rgb(0, 0, 0),
+    lineHeight: 16,
+  });
+
+  // Signature + footer
+  firstPage.drawText("Faheem Choudhury", { x: 60, y: 210, size: 12, font });
+  firstPage.drawText("Sr. Billing & Payroll Manager", { x: 60, y: 195, size: 12, font });
+  firstPage.drawText("Simpson Solutions (PCA)", { x: 60, y: 180, size: 12, font });
+  firstPage.drawText("2227 Westchester Ave. Bronx, NY 10462", { x: 60, y: 165, size: 12, font });
+  firstPage.drawText("Email: faheem@allcarelas.com", { x: 60, y: 150, size: 12, font });
+
+  // Save & download
+const pdfBytes = await pdfDoc.save();
+const blob = new Blob([pdfBytes], { type: "application/pdf" });
+const link = document.createElement("a");
+link.href = URL.createObjectURL(blob);
+
+const safeName = name.replace(/\s+/g, "_"); 
+const todayObj = new Date();
+const mm = String(todayObj.getMonth() + 1).padStart(2, "0");
+const dd = String(todayObj.getDate()).padStart(2, "0");
+const yyyy = todayObj.getFullYear();
+const fileDate = `${mm}-${dd}-${yyyy}`;
+
+link.download = `${safeName}_Employment_Letter_${fileDate}.pdf`;
+link.click();
+
+}
+
+async function generateTerminationLetter() {
+  const { PDFDocument, StandardFonts, rgb } = PDFLib;
+
+  // Grab inputs
+  const name = document.getElementById("termName").value;
+  const hireDate = document.getElementById("termHireDate").value;
+  const endDate = document.getElementById("termEndDate").value;
+  const today = new Date().toLocaleDateString();
+
+  // Load template
+const templateUrl = "Blank All Care EL template.pdf";
+  const existingPdfBytes = await fetch(templateUrl).then(res => res.arrayBuffer());
+
+  const pdfDoc = await PDFDocument.load(existingPdfBytes);
+  const pages = pdfDoc.getPages();
+  const firstPage = pages[0];
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+  // Termination text block
+  const letterText =
+`Date: ${today}
+
+
+To Whom It May Concern:
+
+
+This is to certify that, ${name}, was working with SIMPSON SOLUTIONS, LLC, 
+as a Home Health Attendant for the PCA Program since ${hireDate}. Their last day of
+work was ${endDate}.
+
+
+
+If you have any questions & concerns about their employment, please feel free to contact me 
+at (866) 447-3232.
+
+
+Best Regards,
+`;
+
+  // Draw it into the PDF
+  firstPage.drawText(letterText, {
+    x: 50,
+    y: 600,
+    size: 12,
+    font,
+    color: rgb(0, 0, 0),
+    lineHeight: 16,
+  });
+
+    // Signature + footer
+  firstPage.drawText("Faheem Choudhury", { x: 60, y: 210, size: 12, font });
+  firstPage.drawText("Sr. Billing & Payroll Manager", { x: 60, y: 195, size: 12, font });
+  firstPage.drawText("Simpson Solutions (PCA)", { x: 60, y: 180, size: 12, font });
+  firstPage.drawText("2227 Westchester Ave. Bronx, NY 10462", { x: 60, y: 165, size: 12, font });
+  firstPage.drawText("Email: faheem@allcarelas.com", { x: 60, y: 150, size: 12, font });
+
+  // Save & download
+const pdfBytes = await pdfDoc.save();
+const blob = new Blob([pdfBytes], { type: "application/pdf" });
+const link = document.createElement("a");
+link.href = URL.createObjectURL(blob);
+
+const safeName = name.replace(/\s+/g, "_"); 
+const todayObj = new Date();
+const mm = String(todayObj.getMonth() + 1).padStart(2, "0");
+const dd = String(todayObj.getDate()).padStart(2, "0");
+const yyyy = todayObj.getFullYear();
+const fileDate = `${mm}-${dd}-${yyyy}`;
+
+link.download = `${safeName}_Termination_Letter_${fileDate}.pdf`;
+link.click();
+
+}
+
+function toggleEmploymentForm() {
+  const check = document.getElementById("empCheck").value;
+  const form = document.getElementById("empForm");
+  const warning = document.getElementById("empWarning");
+
+  if (check === "yes") {
+    form.style.display = "block";
+    warning.style.display = "none";
+  } else if (check === "no") {
+    form.style.display = "none";
+    warning.style.display = "block";
+  } else {
+    form.style.display = "none";
+    warning.style.display = "none";
+  }
+}
+
+function toggleTerminationForm() {
+  const check = document.getElementById("termCheck").value;
+  const form = document.getElementById("termForm");
+  const warning = document.getElementById("termWarning");
+
+  if (check === "yes") {
+    form.style.display = "block";
+    warning.style.display = "none";
+  } else if (check === "no") {
+    form.style.display = "none";
+    warning.style.display = "block";
+  } else {
+    form.style.display = "none";
+    warning.style.display = "none";
+  }
+}
+
+</script>
+
+
+
+</body>
+</html>
