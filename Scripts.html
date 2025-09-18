@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scripts - Payroll Tools</title>
+  <link rel="stylesheet" href="Scripts.css"> <!-- page-specific CSS -->
+</head>
+<body>
+  <header>
+        <img src="./Images/Allcare Logo.png" alt="Company Logo" width="340">
+    <h1>Payroll Codes</h1>
+    <h2 class="subtitle">via Tampermonkey</h2>
+    <p class="description">
+      These scripts are designed to streamline payroll tasks using the Tampermonkey browser extension. 
+      Follow the installation guide and copy the scripts you need below.
+    </p>
+  <div class="sidebar">
+    <h2 class="sidebar-title">Payroll Tabs</h2>
+    <a href="index.html" class="tab-link">Worksheets</a>
+    <div class="tab-link active">Scripts</div>
+    <a href="faq.html" class="tab-link">FAQ</a>
+  </div>
+  </header>
+
+  <div class="content">
+    <!-- Button 1: Guide -->
+    <div class="btn-box">
+      <button class="script-btn" onclick="toggleBox('guide')">Tampermonkey Installation Guide</button>
+
+      <div id="guide" class="script-box">
+        <p><strong>Select your browser:</strong></p>
+        <div class="browser-buttons">
+          <a href="./Browser-guides/chrome-guide.html" class="browser-option">
+            <img src="./Images/Browser Logos/Google_Chrome_icon_(February_2022).svg.webp" alt="Chrome" class="browser-icon">
+            <span>Chrome</span>
+          </a>
+          <a href="./Browser-guides/Underconstruction.html" class="browser-option">
+            <img src="./Images/Browser Logos/Microsoft_Edge_b&w.svg.png" alt="Edge" class="browser-icon">
+            <span>Microsoft Edge</span>
+          </a>
+          <a href="./Browser-guides/Underconstruction.html" class="browser-option">
+            <img src="./Images/Browser Logos/Firefox_logo,_b&w.svg.png" alt="Firefox" class="browser-icon">
+            <span>Firefox</span>
+          </a>
+        </div>
+        <div class="install-instructions">
+          <button class="instruction-btn" onclick="openModal()">How to Install a Script</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Script Buttons -->
+    <div class="btn-box">
+      <button class="script-btn" onclick="openScriptModal(
+        'HHAExchange Add Search Tools',
+        './Browser-guides/Gifs for scripts/Search Tools.gif',
+        'https://drive.google.com/uc?export=download&id=178LjBQCQXmaHV5ijT0YqbmVL6qNjdhSY'
+      )">
+        HHAExchange Add Search Tools
+      </button>
+    </div>
+
+    <div class="btn-box">
+      <button class="script-btn" onclick="openScriptModal(
+        'Call Dashboard Reject/Unreject Automation',
+        './Browser-guides/Gifs for scripts/Call D Reject.gif',
+        'https://drive.google.com/uc?export=download&id=1nop0jg3zhoiM2WsMQAnIOwaru4ohrYIZ'
+      )">
+        Call Dashboard Reject/Unreject Automation
+      </button>
+    </div>
+
+    <div class="btn-box">
+      <button class="script-btn" onclick="openScriptModal(
+        'Confirm Timesheet Tools',
+        './Browser-guides/Gifs for scripts/Confirm Timesheet.gif',
+        'https://drive.google.com/uc?export=download&id=1eXp6ZVDYoxgd8g77FpoTDd-BgF91JcI6'
+      )">
+        Confirm Timesheet Tools
+      </button>
+    </div>
+
+    <div class="btn-box">
+      <button class="script-btn" onclick="openScriptModal(
+        'Confirm Duty Tools',
+        './Browser-guides/Gifs for scripts/Duty.gif',
+        'https://drive.google.com/uc?export=download&id=1p0mRDLhNyKaBbK1h5JB4YfThggRRGZYo'
+      )">
+        Confirm Duty Tools
+      </button>
+    </div>
+
+    <div class="btn-box">
+      <button class="script-btn" onclick='openScriptModal(
+      "PTO Calculator",
+      "./Browser-guides/Gifs for scripts/PTO Calculator.gif",
+      "https://drive.google.com/uc?export=download&id=16didIPsYPGnxheuUlYfXU1pMTTsras4-",
+      "javascript:window.postMessage(\"openCompactCalculator\", \"*\");"
+      )'>
+        PTO Calculator
+      </button>
+    </div>
+
+    <div class="btn-box">
+      <button class="script-btn" onclick='openScriptModal(
+      "Autofill Example",
+      "./images/autofill-demo.gif",
+      "./scripts/autofill-example.user.js",
+      "javascript:window.postMessage(\"openCompactCalculator\", \"*\");"
+      )'>
+          Temp.
+      </button>
+    </div>
+  </div>
+
+  <!-- Script Modal -->
+  <div id="scriptModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeScriptModal()">&times;</span>
+      <h2 id="scriptTitle"></h2>
+      <img id="scriptGif" src="" alt="Script Preview" class="script-gif">
+      <div class="modal-actions">
+        <a id="downloadLink" href="#" class="download-btn">Download Script</a>
+        <div id="extraBox" class="extra-box" style="display: none;">
+          <p>Copy this code:</p>
+          <input type="text" id="extraInput" readonly>
+          <button onclick="copyExtra()">Copy</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Install Instructions Modal -->
+  <div id="instructionModal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal()">&times;</span>
+      <h2>How to Install a Script in Tampermonkey</h2>
+      <p>Follow these steps to add a custom script:</p>
+      <div class="gif-step">
+        <img src="./images/step1.gif" alt="Step 1" />
+        <p>Step 1: Download the File. Then Head to the Tampermonkey Dashboard.</p>
+      </div>
+      <div class="gif-step">
+        <img src="./images/step2.gif" alt="Step 2" />
+        <p>Step 2: Drag the file you downloaded into the center of the dashboard.</p>
+      </div>
+      <div class="gif-step">
+        <img src="./images/step3.gif" alt="Step 3" />
+        <p>Step 3: Hit Save.</p>
+      </div>
+      <div class="gif-step">
+        <img src="./images/step4.gif" alt="Step 4" />
+        <p>Step 4: If the Script says it needs a bookmark, just click the copy button, add a new bookmark, paste the bookmark, and it will stay in your bookmarks.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function toggleBox(id) {
+      const box = document.getElementById(id);
+      box.style.display = box.style.display === "block" ? "none" : "block";
+    }
+
+    function openModal() {
+      document.getElementById("instructionModal").style.display = "block";
+    }
+
+    function closeModal() {
+      document.getElementById("instructionModal").style.display = "none";
+    }
+
+    function openScriptModal(title, gifPath, downloadUrl, extraText = null) {
+      document.getElementById("scriptTitle").innerText = title;
+      document.getElementById("scriptGif").src = gifPath;
+      document.getElementById("downloadLink").href = downloadUrl;
+
+      if (extraText) {
+        document.getElementById("extraBox").style.display = "block";
+        document.getElementById("extraInput").value = extraText;
+      } else {
+        document.getElementById("extraBox").style.display = "none";
+      }
+
+      document.getElementById("scriptModal").style.display = "block";
+    }
+
+    function closeScriptModal() {
+      document.getElementById("scriptModal").style.display = "none";
+    }
+
+    function copyExtra() {
+  const input = document.getElementById("extraInput");
+  input.select();
+  document.execCommand("copy");
+
+  const btn = document.querySelector("#extraBox button");
+  const originalText = btn.innerText;
+
+  // Change button style & text
+  btn.innerText = "Copied!";
+  btn.style.backgroundColor = "green";
+
+  // Revert after 1.5s
+  setTimeout(() => {
+    btn.innerText = originalText;
+    btn.style.backgroundColor = "";
+  }, 1500);
+}
+
+
+    // Close modals if user clicks outside
+    window.onclick = function(event) {
+      const instructionModal = document.getElementById("instructionModal");
+      const scriptModal = document.getElementById("scriptModal");
+      if (event.target === instructionModal) {
+        instructionModal.style.display = "none";
+      }
+      if (event.target === scriptModal) {
+        scriptModal.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
