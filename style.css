@@ -25,7 +25,7 @@ h1 {
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  width: 950px;
+  width: 150px;
   margin: 10px 0;
 }
 
@@ -66,6 +66,7 @@ h1 {
 
 /* Themed button (blue + white like the logo) */
 .dada-btn {
+  display: none;
   background-color: #2c77a5; /* pick a blue from the logo */
   color: #ffffff;
   padding: 12px 20px;
@@ -74,6 +75,7 @@ h1 {
   font-size: 15px;
   cursor: pointer;
   transition: background-color 0.3s;
+  margin-left: 40px;
 }
 
 .dada-btn:hover {
@@ -169,3 +171,72 @@ html {
   overflow-y: scroll;  /* always reserve scrollbar */
 
 }
+
+/* ===== Hover Info Tooltip System ===== */
+
+
+.info-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.info-btn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2px solid #ad66cc;
+  background: #ffffff;
+  color: #ad66cc;
+  font-weight: bold;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  cursor: default;
+  margin-left: 10px;
+}
+
+/* Tooltip bubble */
+.info-pop {
+  position: absolute;
+  left: 50px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 420px;
+  background: #ffffff;
+  color: #111;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-size: 15px;
+  line-height: 1.35;
+  text-align: left;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.12);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.info-wrap:hover .info-pop {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(-50%) translateX(6px);
+}
+
+/* Tooltip arrow */
+.info-pop::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: transparent #ffffff transparent transparent;
+  filter: drop-shadow(-1px 0 0 #ddd);
+}
+
