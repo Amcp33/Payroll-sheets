@@ -60,9 +60,54 @@
 </div>
 </div>
 
+<div class="option">
+  <button class="btn" onclick="toggleBox('employmentInactiveBox')">
+    Employment Letter <br>(Active but not working)
+  </button>
+</div>
+
+<!-- Employment Letter (Active, but not working) -->
+
+
+<div id="employmentInactiveBox" class="details-box hidden">
+  <h4>Employment Letter (Active, but not working)</h4>
+
+  <p class="desc">
+    Generate employment letters for aides who are active but not currently working.
+    <strong>For any modifications, please contact Faheem or Amancio.</strong>
+  </p>
+
+  <label>Is the Aide Active on HHA?</label>
+  <select id="empInactiveCheck" onchange="toggleEmploymentInactiveForm()">
+    <option value="">-- Select --</option>
+    <option value="yes">Yes</option>
+    <option value="no">No</option>
+  </select>
+
+  <p id="empInactiveWarning" style="color:red; display:none;">
+    To make this letter, the Aide must be active first.
+  </p>
+
+  <div id="empInactiveForm" style="display:none;">
+    <label>Employee Name:</label>
+    <input type="text" id="empInactiveName">
+
+    <label>First Work Date (MM/DD/YYYY):</label>
+    <input type="text" id="empInactiveStartDate">
+
+    <label>Last Work Date (MM/DD/YYYY):</label>
+    <input type="text" id="empInactiveEndDate">
+
+    <button class="action-btn" onclick="generateEmploymentActiveNotWorkingLetter()">
+      Generate Employment Letter
+    </button>
+  </div>
+</div>
+
  <div class="option">
   <button class="btn" onclick="toggleBox('terminationBox')">Termination Letter</button>
 </div>
+
 
 <div id="terminationBox" class="details-box hidden">
   <h4>Termination Letter</h4>
@@ -100,6 +145,86 @@
     const box = document.getElementById(id);
     box.classList.toggle("show");
   }
+  function toggleEmploymentInactiveForm() {
+  const check = document.getElementById("empInactiveCheck").value;
+  const form = document.getElementById("empInactiveForm");
+  const warning = document.getElementById("empInactiveWarning");
+
+  if (check === "yes") {
+    form.style.display = "block";
+    warning.style.display = "none";
+  } else if (check === "no") {
+    form.style.display = "none";
+    warning.style.display = "block";
+  } else {
+    form.style.display = "none";
+    warning.style.display = "none";
+  }
+}
+
+  </script>
+
+  <script>
+    function wrapText(font, text, fontSize, maxWidth) {
+  const lines = [];
+  const paragraphs = String(text).split("\n");
+
+  for (const p of paragraphs) {
+    if (p.trim() === "") {
+      lines.push("");
+      continue;
+    }
+
+    const words = p.split(" ");
+    let line = "";
+
+    for (let w of words) {
+      if (font.widthOfTextAtSize(w, fontSize) > maxWidth) {
+        if (line.trim()) {
+          lines.push(line.trim());
+          line = "";
+        }
+
+        let chunk = "";
+        for (const ch of w) {
+          const test = chunk + ch;
+          if (font.widthOfTextAtSize(test, fontSize) <= maxWidth) {
+            chunk = test;
+          } else {
+            lines.push(chunk);
+            chunk = ch;
+          }
+        }
+        if (chunk) lines.push(chunk);
+        continue;
+      }
+
+      const testLine = line ? line + " " + w : w;
+      if (font.widthOfTextAtSize(testLine, fontSize) <= maxWidth) {
+        line = testLine;
+      } else {
+        lines.push(line);
+        line = w;
+      }
+    }
+
+    if (line) lines.push(line);
+  }
+
+  return lines;
+}
+
+function drawWrappedText(page, font, text, {
+  x, y, size, lineHeight, maxWidth, color
+}) {
+  const lines = wrapText(font, text, size, maxWidth);
+  let cursorY = y;
+
+  for (const line of lines) {
+    page.drawText(line, { x, y: cursorY, size, font, color });
+    cursorY -= lineHeight;
+  }
+}
   </script>
 
 <script src="https://unpkg.com/pdf-lib/dist/pdf-lib.min.js"></script>
@@ -135,14 +260,11 @@ async function generateEmploymentLetter() {
 To Whom It May Concern:
 
 
-This is to certify that, ${name}, is currently working with SIMPSON SOLUTIONS, 
-LLC, as a Home Health Aide for the PCA Program since ${startDate} and currently works ${hours} 
-hours per week. Their current gross amount of weekly payment is $${amount}.
+This is to certify that, ${name}, is currently working with SIMPSON SOLUTIONS, LLC, as a Home Health Aide for the PCA Program since ${startDate} and currently works ${hours} hours per week. Their current gross amount of weekly payment is $${amount}.
 
 
 
-If you have any questions & concerns about their employment, please feel free to contact me 
-at (866) 447-3232.
+If you have any questions & concerns about their employment, please feel free to contact me at (866) 447-3232.
 
 
 
@@ -150,14 +272,22 @@ Best Regards,
 `;
 
   // Draw the letter
-  firstPage.drawText(letterText, {
-    x: 60,
-    y: 600,          // adjust until it fits right
-    size: 12,
-    font,
-    color: rgb(0, 0, 0),
-    lineHeight: 16,
-  });
+  const fontSize = 12;
+const lineHeight = 16;
+const leftX = 60;
+const rightMargin = 60;
+const pageWidth = firstPage.getWidth();
+const maxWidth = pageWidth - leftX - rightMargin;
+
+drawWrappedText(firstPage, font, letterText, {
+  x: leftX,
+  y: 600,
+  size: fontSize,
+  lineHeight,
+  maxWidth,
+  color: rgb(0, 0, 0),
+});
+
 
   // Signature + footer
   firstPage.drawText("Faheem Choudhury", { x: 60, y: 210, size: 12, font });
@@ -183,6 +313,82 @@ link.download = `${safeName}_Employment_Letter_${fileDate}.pdf`;
 link.click();
 
 }
+
+async function generateEmploymentActiveNotWorkingLetter() {
+  const { PDFDocument, StandardFonts, rgb } = PDFLib;
+
+  // Grab inputs
+  const name = document.getElementById("empInactiveName").value;
+  const startDate = document.getElementById("empInactiveStartDate").value;
+  const endDate = document.getElementById("empInactiveEndDate").value;
+  const today = new Date().toLocaleDateString();
+
+  // Load template
+  const templateUrl = "Blank All Care EL template.pdf";
+  const existingPdfBytes = await fetch(templateUrl).then(res => res.arrayBuffer());
+
+  const pdfDoc = await PDFDocument.load(existingPdfBytes);
+  const pages = pdfDoc.getPages();
+  const firstPage = pages[0];
+  const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
+
+  const letterText =
+`Date: ${today}
+
+
+To Whom It May Concern:
+
+
+This is to certify that, ${name}, is currently employed with SIMPSON SOLUTIONS, LLC as a Home Health Aide for the PCA Program since ${startDate}. The last day they worked was ${endDate}. ${name} is still an active employee and is waiting for a new patient to be assigned.
+
+
+If you have any questions & concerns about their employment, please feel free to contact me at (646) 661-2500.
+
+
+Best Regards,
+`;
+
+  const fontSize = 12;
+const lineHeight = 16;
+const leftX = 60;
+const rightMargin = 60;
+const pageWidth = firstPage.getWidth();
+const maxWidth = pageWidth - leftX - rightMargin;
+
+drawWrappedText(firstPage, font, letterText, {
+  x: leftX,
+  y: 600,
+  size: fontSize,
+  lineHeight,
+  maxWidth,
+  color: rgb(0, 0, 0),
+});
+
+
+  // Signature + footer (same as others)
+  firstPage.drawText("Faheem Choudhury", { x: 60, y: 210, size: 12, font });
+  firstPage.drawText("Sr. Billing & Payroll Manager", { x: 60, y: 195, size: 12, font });
+  firstPage.drawText("Simpson Solutions (PCA)", { x: 60, y: 180, size: 12, font });
+  firstPage.drawText("2227 Westchester Ave. Bronx, NY 10462", { x: 60, y: 165, size: 12, font });
+  firstPage.drawText("Email: faheem@allcarelas.com", { x: 60, y: 150, size: 12, font });
+
+  // Save & download
+  const pdfBytes = await pdfDoc.save();
+  const blob = new Blob([pdfBytes], { type: "application/pdf" });
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+
+  const safeName = name.replace(/\s+/g, "_");
+  const todayObj = new Date();
+  const mm = String(todayObj.getMonth() + 1).padStart(2, "0");
+  const dd = String(todayObj.getDate()).padStart(2, "0");
+  const yyyy = todayObj.getFullYear();
+  const fileDate = `${mm}-${dd}-${yyyy}`;
+
+  link.download = `${safeName}_Employment_Active_Not_Working_${fileDate}.pdf`;
+  link.click();
+}
+
 
 async function generateTerminationLetter() {
   const { PDFDocument, StandardFonts, rgb } = PDFLib;
@@ -210,28 +416,33 @@ const templateUrl = "Blank All Care EL template.pdf";
 To Whom It May Concern:
 
 
-This is to certify that, ${name}, was working with SIMPSON SOLUTIONS, LLC, 
-as a Home Health Attendant for the PCA Program since ${hireDate}. Their last day of
-work was ${endDate}.
+This is to certify that, ${name}, was working with SIMPSON SOLUTIONS, LLC, as a Home Health Attendant for the PCA Program since ${hireDate}. Their last day of work was ${endDate}.
 
 
 
-If you have any questions & concerns about their employment, please feel free to contact me 
-at (866) 447-3232.
+If you have any questions & concerns about their employment, please feel free to contact me at (866) 447-3232.
 
 
 Best Regards,
 `;
 
   // Draw it into the PDF
-  firstPage.drawText(letterText, {
-    x: 50,
-    y: 600,
-    size: 12,
-    font,
-    color: rgb(0, 0, 0),
-    lineHeight: 16,
-  });
+const fontSize = 12;
+const lineHeight = 16;
+const leftX = 60;
+const rightMargin = 60;
+const pageWidth = firstPage.getWidth();
+const maxWidth = pageWidth - leftX - rightMargin;
+
+drawWrappedText(firstPage, font, letterText, {
+  x: leftX,
+  y: 600,
+  size: fontSize,
+  lineHeight,
+  maxWidth,
+  color: rgb(0, 0, 0),
+});
+
 
     // Signature + footer
   firstPage.drawText("Faheem Choudhury", { x: 60, y: 210, size: 12, font });
